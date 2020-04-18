@@ -11,7 +11,7 @@
 - -0500 The Persian Empire - a universal political order 'for the benefit of all humans'.
 - -0500 Buddhism in India - a universal truth 'to liberate all beings from suffering'.
 - 0000 Han Empire in China
-- 0000 Roman Empire in the Mediterranean
+- -0026:0476/09/04 Roman Empire in the Mediterranean #empire
 - 0000 Christianity
 - 0400 Islam
 - 1500 The Scientific Revolution. Humankind admits its ignorance and beings to acquire unprecedented power. Europeans begin to conquer America and the oceans. The entire planet becomes a single historical arena. The rise of capitalism.

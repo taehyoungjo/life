@@ -4,6 +4,8 @@ Simple timelines generated from Markdown.
 
 Repurposed from Lim Chee Aun's [cheeaun.life](https://github.com/cheeaun/life)
 
+Run `python -m http.server` in directory and navigate to `http://localhost:8000/`
+
 ## Features
 
 - Events: List items in the format of `- DATE TEXT` where `-`, `DATE`, and `TEXT` are separated by a single space to render an event

@@ -40,6 +40,10 @@ header {
   color: #1abc9c;
 }
 
-#life .event.tag-job .time {
+#life .event.tag-empire .time {
   border: 4px solid #3498db;
+}
+
+#life .event.tag-empire .span-empire {
+  color: #3498db;
 }
