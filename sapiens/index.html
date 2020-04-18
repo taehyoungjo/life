@@ -271,21 +271,42 @@
           }
         } else {
           // Regex to split into d, M, y
-          var year = time.split("/")[0];
-          var month = time.split("/")[1];
-          var date = time.split("/")[2];
 
-          var d = moment({
-            y: year,
-            M: month - 1,
-            d: date,
-          });
+          var s = time.split("/");
+          if (s.length == 3) {
+            var year = s[0];
+            var month = s[1];
+            var date = s[2];
+            var d = moment({
+              y: year,
+              M: month - 1,
+              d: date,
+            });
+            data[point + "Date"] = d.date();
+            data[point + "Month"] = d.month();
+            data[point + "Year"] = d.year();
 
-          data[point + "Date"] = d.date();
-          data[point + "Month"] = d.month();
-          data[point + "Year"] = d.year();
+            data.title = d.format("MMMM Do YYYY");
+          } else if (s.length == 2) {
+            var year = s[0];
+            var month = s[1];
+            var d = moment({
+              y: year,
+              M: month - 1,
+            });
+            data[point + "Month"] = d.month();
+            data[point + "Year"] = d.year();
 
-          data.title = d.format("MMMM Do YYYY");
+            data.title = d.format("MMMM YYYY");
+          } else if (s.length == 1) {
+            var year = s[0];
+            var d = moment({
+              y: year,
+            });
+            data[point + "Year"] = d.year();
+
+            data.title = d.format("YYYY");
+          }
         }
 
         // var d = moment({ y: -2010, M: 3, d: 5, h: 15, m: 10, s: 3, ms: 123 });

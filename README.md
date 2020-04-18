@@ -8,8 +8,6 @@ I've repurposed Lim Chee Aun's [cheeaun.life](https://github.com/cheeaun/life) t
 
 ### In progress
 
-## How to setup your own _Life_
-
 ## How to configure your _Life_
 
 1. Make a copy of `config.example.json`, rename it to `config.json`.
@@ -31,8 +29,10 @@ Modifications have been made from the original project in rendering dates. We no
 
 ### Supported formats
 
-- YYYY/MM/DD
-- YYYY/MM/DD:YYYY/MM/DD
+- `YYYY`
+- `YYYY/MM`
+- `YYYY/MM/DD`
+- `YYYY/MM/DD:YYYY/MM/DD` or any combination of the above separated by a colon
 
 ## Other people's Lives
 
