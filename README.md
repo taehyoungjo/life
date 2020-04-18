@@ -2,18 +2,20 @@
 
 Simple timelines generated from Markdown.
 
-I've repurposed Lim Chee Aun's [cheeaun.life](https://github.com/cheeaun/life) to act as a tool for creating general purpose timelines.
+Repurposed from Lim Chee Aun's [cheeaun.life](https://github.com/cheeaun/life)
 
 ## Features
 
+- Events: List items in the format of `- DATE TEXT` where `-`, `DATE`, and `TEXT` are separated by a single space to render an event
+- Dates: Dates of arbitrary specificity. See Datetime for range of formats
+- Tags: Specified by `#` in `life.md` and `#life .event.tag-XXXX .time` and `#life .event.tag-XXX .time` in custom style sheet
+
 ### In progress
 
-## How to configure your _Life_
+- Incorrect offsets with negative years
+- `onmouseover` descriptions
 
-1. Make a copy of `config.example.json`, rename it to `config.json`.
-2. Only commit it in `gh-pages` branch.
-
-The configuration:
+## How to configure your _Timeline_
 
 - `customStylesheetURL` - (_string_, default to `null`) Path to a custom stylesheet file, for those who doesn't like the default _theme_.
 - `yearLength` - (_number_, default to `120`) The width of the year grids, in pixels.
@@ -25,18 +27,14 @@ Added features
 
 ## Datetime
 
-Modifications have been made from the original project in rendering dates. We now use moment.js instead of a custom parser. Years can be arbitrary many digits and negative years are also supported.
+Modifications have been made from the original project in rendering dates. We now use `moment.js` instead of a custom parser. Years can be arbitrarily many digits and negative years render correctly.
 
 ### Supported formats
 
-- `YYYY`
+- `YYYY` with arbitrarily many digits
 - `YYYY/MM`
 - `YYYY/MM/DD`
 - `YYYY/MM/DD:YYYY/MM/DD` or any combination of the above separated by a colon
-
-## Other people's Lives
-
-Here's [a compilation of Lives from the people who have forked Life](https://github.com/cheeaun/life/wiki/Lives).
 
 ## License
 
