@@ -27,14 +27,14 @@
   }
   header {
     z-index: 3;
-    background: linear-gradient(
+    /* background: linear-gradient(
       to bottom,
       rgba(56, 64, 71, 0) 0%,
       rgba(56, 64, 71, 0.5) 20%,
       rgba(56, 64, 71, 1) 50%,
       rgba(56, 64, 71, 0.5) 80%,
       rgba(56, 64, 71, 0) 100%
-    );
+    ); */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -92,11 +92,11 @@
     border-left: 0;
   }
   #life-years .year span {
-    background: linear-gradient(
+    /* background: linear-gradient(
       to bottom,
       rgba(56, 64, 71, 1) 30%,
       rgba(56, 64, 71, 0) 100%
-    );
+    ); */
     display: block;
     padding: 10px;
     position: -webkit-sticky;
@@ -110,7 +110,7 @@
   }
   #life-events {
     padding-top: 40px;
-    padding-bottom: 5em;
+    padding-bottom: 40px;
     position: relative;
   }
   #life-events:after {
@@ -223,17 +223,25 @@
 
         var data = [];
         list.forEach(function (l) {
-          // var matches = l.match(/\-\s+([\d\/\-\~]+)\s(.*)/i);
+          //   var matches = l.match(/\-\s+([\d\/\-\~]+)\s(.*)/i);
+          //   console.log(matches);
 
           var first_split = l.split(/\s(.+)/)[1];
 
           var time = first_split.split(/\s(.+)/)[0];
-          var text = first_split.split(/\s(.+)/)[1];
+          var tags = [];
+          var text = first_split
+            .split(/\s(.+)/)[1]
+            .replace(/#(\w+)/gi, function (hashtag, cleantag) {
+              tags.push("tag-" + cleantag);
+              return life.config.hideTags ? "" : hashtag;
+            });
           //   var time = matches[1];
           //   var text = matches[2];
           data.push({
             time: life.parseTime(time),
             text: text,
+            tags: tags,
           });
         });
         return data;
@@ -252,16 +260,6 @@
 
         var split = time.split(":");
         if (split.length == 2) {
-          //   // TIME-TIME
-          //   var splitTime = time.split("-");
-          //   var startTime = life.parseTime(splitTime[0]);
-          //   var endTime = life.parseTime(splitTime[1], "end");
-          //   for (var k in startTime) {
-          //     data[k] = startTime[k];
-          //   }
-          //   for (var k in endTime) {
-          //     data[k] = endTime[k];
-          //   }
           var startTime = life.parseTime(split[0]);
           var endTime = life.parseTime(split[1], "end");
 
@@ -272,21 +270,16 @@
             data[k] = endTime[k];
           }
         } else {
-          if (time[0] == "-") {
-            var year = time.slice(1, 5);
-            var month = time.slice(6, 8) - 1;
-            var date = time.slice(9, 11);
-            var d = moment({
-              y: -1 * year,
-              M: month,
-              d: 1 * date,
-            });
-          } else {
-            var d = moment(time);
-          }
+          // Regex to split into d, M, y
+          var year = time.split("/")[0];
+          var month = time.split("/")[1];
+          var date = time.split("/")[2];
 
-          //   var test = moment({ y: -10000 });
-          //   console.log(test.year());
+          var d = moment({
+            y: year,
+            M: month - 1,
+            d: date,
+          });
 
           data[point + "Date"] = d.date();
           data[point + "Month"] = d.month();
@@ -367,7 +360,7 @@
         });
 
         // Calculate width
-        if (endYear) {
+        if (endYear || endYear == 0) {
           var d_r = moment({
             y: endYear,
             M: endMonth,
@@ -375,7 +368,6 @@
           });
 
           var daysDiff = d_r.diff(d_m, "days");
-          console.log("daysDiff " + daysDiff);
           width = daysDiff * dayLength;
         } else {
           if (startDate) {
@@ -388,20 +380,9 @@
         }
 
         // Calculate offset
-        // console.log("firstYear: " + firstYear);
-        // console.log("startYear: " + startYear);
-
         var startTime = moment({
           y: firstYear,
         });
-
-        // var startTime = new Date(firstYear, 0, 1);
-        // var endTime = new Date(
-        //   startYear,
-        //   startMonth ? startMonth - 1 : 0,
-        //   startDate || 1
-        // );
-        // var daysDiff = (endTime - startTime) / (24 * 60 * 60 * 1000);
 
         var daysDiff = d_m.diff(startTime, "days");
         // console.log(daysDiff);
@@ -430,6 +411,16 @@
         //   }
         // }
 
+        d.text = d.text.replace(/#(\w+)/gi, function (hashtag, cleantag) {
+          return life.config.hideTags
+            ? ""
+            : '<span class="span-' +
+                hashtag.slice(1) +
+                '">' +
+                hashtag +
+                "<span/>";
+        });
+
         // Parse Markdown links in the text
         // credit: http://stackoverflow.com/a/9268827
         var link = null;
@@ -447,7 +438,9 @@
         }
 
         return (
-          '<div class="event" style="margin-left: ' +
+          '<div class="event ' +
+          d.tags.join(" ") +
+          '" style="margin-left: ' +
           offset.toFixed(2) +
           'px">' +
           '<div class="time" style="width: ' +
@@ -466,7 +459,6 @@
         var days = 0;
         var hideAge = life.config.hideAge;
 
-        var param = 0.1;
         // console.log(dayLength);
 
         // I could divide dayLength by factor of ten repeatedly
@@ -503,22 +495,32 @@
         document.title = title;
         life.$title.innerHTML = title;
 
-        // Get the first and last year for the year axis
-        var firstYear = new Date().getFullYear();
+        // // Get the first and last year for the year axis
+        // var firstYear = new Date().getFullYear();
+        // console.log("f " + firstYear);
         // var lastYear = firstYear;
+        // console.log("l " + lastYear);
+        var firstYear = Number.POSITIVE_INFINITY;
         var lastYear = Number.NEGATIVE_INFINITY;
+
         data.forEach(function (d) {
           var time = d.time;
           var startYear = time.startYear;
           var endYear = time.endYear;
-          console.log(endYear);
+          //   console.log("startYear " + startYear);
+          //   console.log("endYear " + endYear);
           //   var sy = moment({ y: startYear });
           //   var ey = moment({ y: endYear });
-          if (startYear && startYear < firstYear) firstYear = startYear;
+          if (startYear < firstYear) firstYear = startYear;
+          if (startYear > lastYear) lastYear = startYear;
           if (endYear && endYear > lastYear) lastYear = endYear;
-          console.log(lastYear);
+          //   console.log("firstYear " + firstYear);
+          //   console.log("lastYear " + lastYear);
         });
         life.firstYear = firstYear;
+
+        console.log("fy: " + firstYear);
+        console.log("ly: " + lastYear);
 
         var html = '<div id="life-events">';
         // 'comment_' class name is to hide it from Safari Reader

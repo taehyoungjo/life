@@ -1,5 +1,6 @@
 {
-  "customStylesheetURL": null,
-  "yearLength": 30,
-  "hideAge": false
+  "customStylesheetURL": "style.css",
+  "yearLength": 0.1,
+  "hideAge": true,
+  "hideTags": false
 }
